@@ -295,6 +295,72 @@ footer a { color: inherit; }
 @keyframes fadeIn { from { opacity: 0; } }
 @keyframes langSwap { from { opacity: .3; filter: blur(3px); } }
 
+/* ---------- extra motion ---------- */
+.blobs { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.blobs i { position: absolute; width: 46vmax; height: 46vmax; border-radius: 50%; filter: blur(70px); }
+.blobs i:nth-child(1) { top: -18vmax; left: -12vmax; background: var(--amb); opacity: .28; }
+.blobs i:nth-child(2) { top: 35vh; right: -18vmax; background: var(--accent); opacity: .12; }
+.blobs i:nth-child(3) { bottom: -22vmax; left: 15vw; background: var(--warm); opacity: .10; }
+button, .star, .chip .go, .chip .x { position: relative; overflow: hidden; }
+.ripple { position: absolute; border-radius: 50%; pointer-events: none; background: currentColor; opacity: .25; transform: scale(0); animation: ripple .6s ease-out forwards; }
+@keyframes ripple { to { transform: scale(4); opacity: 0; } }
+.now { transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .5s cubic-bezier(.2,.8,.2,1), background .8s, filter .4s; will-change: transform; }
+.now.tilting { transition: transform .08s linear, background .8s; }
+.now::before { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: 0; transition: opacity .4s;
+  background: radial-gradient(400px circle at var(--mx, 50%) var(--my, 50%), rgb(255 255 255 / .18), transparent 60%); }
+.now.tilting::before { opacity: 1; }
+.now > div, .now .alert { position: relative; z-index: 1; }
+.now .big { position: relative; z-index: 1; translate: var(--px, 0) var(--py, 0); transition: translate .3s ease-out; }
+.now.shake { animation: shake .4s; }
+@keyframes shake { 20% { translate: -3px 1px; } 40% { translate: 3px -1px; } 60% { translate: -2px 0; } 80% { translate: 2px 1px; } }
+.loading .now { filter: blur(2px) saturate(.8); }
+.temp { background: linear-gradient(100deg, #fff 30%, #dbeeff 45%, #fff 60%); background-size: 250% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: none; filter: drop-shadow(0 2px 10px rgb(0 0 0 / .2)); }
+.tile { transform: perspective(700px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0)); }
+.tile:hover { --lift: -4px; transform: perspective(700px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift)); }
+.tile .k svg { transition: transform .4s cubic-bezier(.3,1.6,.5,1); }
+.tile:hover .k svg { transform: scale(1.3) rotate(-12deg); }
+.chip { transition: transform .2s; }
+.chip:hover { transform: translateY(-2px); }
+.days li:hover { transform: translateX(4px); }
+[dir="rtl"] .days li:hover { transform: translateX(-4px); }
+.bar span::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(90deg, transparent, rgb(255 255 255 / .55), transparent); background-size: 50% 100%; background-repeat: no-repeat; background-position: -100% 0; }
+.spark { position: fixed; width: 7px; height: 7px; border-radius: 50%; pointer-events: none; z-index: 40; background: #ffd25a; animation: spark .7s cubic-bezier(.2,.8,.3,1) forwards; }
+@keyframes spark { to { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; } }
+.hcross { pointer-events: none; transition: opacity .15s; }
+.hcross rect { fill: var(--fg); }
+.hcross text { fill: var(--bg) !important; font-weight: 600; font-size: 12px; }
+.hcross line { stroke: var(--accent); stroke-width: 1.5; }
+.hcross circle { fill: var(--accent); stroke: var(--panel); stroke-width: 3; }
+.wobble { transform-box: view-box; transform-origin: 35px 35px; }
+.halo { transform-box: fill-box; transform-origin: center; }
+@media (prefers-reduced-motion: no-preference) {
+  .blobs i:nth-child(1) { animation: blob1 22s ease-in-out infinite alternate; }
+  .blobs i:nth-child(2) { animation: blob2 27s ease-in-out infinite alternate; }
+  .blobs i:nth-child(3) { animation: blob3 31s ease-in-out infinite alternate; }
+  .temp { animation: shine 6s ease-in-out infinite; }
+  .bar span::after { animation: sweep 3.2s ease-in-out infinite; animation-delay: calc(1.2s + var(--i, 0) * .25s); }
+  .wobble { animation: wobble 2.6s ease-in-out infinite; }
+  .halo { animation: halo 2s ease-in-out infinite; }
+  .brand svg path { animation: bob 3s ease-in-out infinite; }
+  .search input:focus ~ svg, .search:focus-within > svg { animation: pulse 1.2s ease-in-out infinite; }
+  .enter .now { animation: heroIn .8s cubic-bezier(.2,.9,.25,1.1) both; }
+  .enter .now .big { animation: iconIn .9s cubic-bezier(.3,1.6,.5,1) both .25s, float 6s ease-in-out infinite 1.2s; }
+  .enter .place-row, .enter .sub, .enter .cond, .enter .summary { animation: rise .6s ease-out both; }
+  .enter .sub { animation-delay: .1s; } .enter .cond { animation-delay: .2s; } .enter .summary { animation-delay: .3s; }
+  .enter .alert { animation: rise .5s ease-out both .45s; }
+  .meter i { animation: slideIn 1.1s cubic-bezier(.3,1.5,.5,1) both .4s; }
+  .lang-swap header, .lang-swap .search { animation: rise .45s ease-out both; }
+}
+@keyframes blob1 { to { transform: translate(18vw, 12vh) scale(1.15); } }
+@keyframes blob2 { to { transform: translate(-16vw, -10vh) scale(.9); } }
+@keyframes blob3 { to { transform: translate(10vw, -14vh) scale(1.2); } }
+@keyframes shine { 0%, 100% { background-position: 100% 0; } 50% { background-position: 0 0; } }
+@keyframes sweep { 0% { background-position: -100% 0; } 60%, 100% { background-position: 200% 0; } }
+@keyframes wobble { 0%, 100% { transform: rotate(-7deg); } 50% { transform: rotate(7deg); } }
+@keyframes halo { 50% { transform: scale(1.5); opacity: .05; } }
+@keyframes heroIn { from { opacity: 0; transform: perspective(1000px) rotateX(8deg) translateY(30px) scale(.96); } }
+@keyframes iconIn { from { opacity: 0; transform: scale(.3) rotate(-25deg); } }
+
 @media (max-width: 560px) {
   .now { grid-template-columns: minmax(0, 1fr); padding: 22px 18px; }
   .now svg.big { position: absolute; inset-inline-end: 12px; top: 14px; width: 84px; }
@@ -315,6 +381,7 @@ footer a { color: inherit; }
 </head>
 <body>
 <div class="ambient" aria-hidden="true"></div>
+<div class="blobs" aria-hidden="true"><i></i><i></i><i></i></div>
 <div class="wrap" id="app">
   <header>
     <div class="brand">
@@ -521,11 +588,11 @@ const I = {
 /* ================= animated sky (canvas) ================= */
 const Sky = {
   cv: null, ctx: null, w: 0, h: 0, kind: "sun", day: 1, raf: 0, ro: null,
-  parts: [], clouds: [], stars: [], flash: 0, bolt: null, nextBolt: 0, shoot: null,
-  attach(cv, kind, day) {
+  parts: [], clouds: [], stars: [], flash: 0, bolt: null, nextBolt: 0, shoot: null, wind: 0, streaks: [], splashes: [],
+  attach(cv, kind, day, wind = 0) {
     cancelAnimationFrame(this.raf);
     this.ro?.disconnect();
-    Object.assign(this, { cv, ctx: cv.getContext("2d"), kind, day });
+    Object.assign(this, { cv, ctx: cv.getContext("2d"), kind, day, wind });
     this.ro = new ResizeObserver(() => { this.size(); this.seed(); if (reduceMotion) this.draw(0, true); });
     this.ro.observe(cv);
     this.size(); this.seed();
@@ -556,6 +623,9 @@ const Sky = {
       for (let i = 0; i < n; i++)
         this.clouds.push({ x: rnd(-.3, 1) * w, y: rnd(.02, .55) * h, s: rnd(.7, 1.5), v: rnd(.06, .22), a: kind === "storm" ? .1 : kind === "rain" ? .14 : day ? .32 : .12 });
     }
+    this.streaks = []; this.splashes = [];
+    const nStreaks = Math.min(14, Math.round(this.wind / 3));     // more wind, more streaks
+    for (let i = 0; i < nStreaks; i++) this.streaks.push({ x: rnd(-w, w), y: rnd(0, h), l: rnd(40, 120), v: rnd(4, 9) + this.wind / 8, a: rnd(.08, .22) });
     this.nextBolt = performance.now() / 1000 + rnd(.8, 2.5);
     this.flash = 0; this.shoot = null;
   },
@@ -621,9 +691,32 @@ const Sky = {
     if (kind === "rain" || kind === "storm") {                      // rain streaks
       ctx.lineWidth = 1.3; ctx.lineCap = "round";
       for (const p of this.parts) {
-        if (!still) { p.y += p.v; p.x -= p.v * .22; if (p.y > h + 10) { p.y = rnd(-40, -10); p.x = rnd(0, w + 80); } }
+        if (!still) {
+          p.y += p.v; p.x -= p.v * .22;
+          if (p.y > h - 4) {
+            if (Math.random() < .35) this.splashes.push({ x: p.x, y: h - rnd(2, 10), r: 1, life: 1 });
+            p.y = rnd(-40, -10); p.x = rnd(0, w + 80);
+          }
+        }
         ctx.strokeStyle = `rgba(210,230,255,${p.a})`;
         ctx.beginPath(); ctx.moveTo(p.x + p.l * .22, p.y - p.l); ctx.lineTo(p.x, p.y); ctx.stroke();
+      }
+      ctx.lineWidth = 1;                                            // splashes where drops land
+      this.splashes = this.splashes.filter(s => s.life > 0);
+      for (const s of this.splashes) {
+        ctx.strokeStyle = `rgba(220,235,255,${s.life * .6})`;
+        ctx.beginPath(); ctx.ellipse(s.x, s.y, s.r * 3, s.r, 0, Math.PI, 2 * Math.PI); ctx.stroke();
+        s.r += .35; s.life -= .06;
+      }
+    }
+    if (this.streaks.length) {                                      // wind streaks
+      ctx.lineCap = "round"; ctx.lineWidth = 1.5;
+      for (const s of this.streaks) {
+        if (!still) { s.x += s.v; if (s.x > w + 20) { s.x = rnd(-200, -40); s.y = rnd(0, h); } }
+        const yy = s.y + Math.sin((s.x + sec * 40) / 60) * 6;
+        const g = ctx.createLinearGradient(s.x - s.l, yy, s.x, yy);
+        g.addColorStop(0, "rgba(255,255,255,0)"); g.addColorStop(1, `rgba(255,255,255,${s.a})`);
+        ctx.strokeStyle = g; ctx.beginPath(); ctx.moveTo(s.x - s.l, yy); ctx.quadraticCurveTo(s.x - s.l / 2, yy - 6, s.x, yy); ctx.stroke();
       }
     }
     if (kind === "snow") {                                          // snowflakes
@@ -640,6 +733,8 @@ const Sky = {
         let x = rnd(w * .2, w * .8), y = 0; const pts = [[x, y]], end = h * rnd(.5, .85);
         while (y < end) { y += rnd(12, 26); x += rnd(-18, 18); pts.push([x, y]); }
         this.bolt = pts;
+        const hero = this.cv.closest(".now");
+        hero?.classList.remove("shake"); void hero?.offsetWidth; hero?.classList.add("shake");
       }
       if (this.flash > 0) {
         ctx.fillStyle = `rgba(220,225,255,${this.flash * .32})`; ctx.fillRect(0, 0, w, h);
@@ -788,8 +883,10 @@ function render(animate) {
     <section class="details" style="--i:3">${detailsHtml()}</section>
   </div>`;
 
-  Sky.attach($(".now canvas"), kind, c.is_day);
+  Sky.attach($(".now canvas"), kind, c.is_day, c.wind_speed_10m);
   renderHourly(animate);
+  if (animate && !reduceMotion) animateNums();
+  bindTilt();
 
   // count the big temperature up from the last value shown
   const target = Math.round(toU(c.temperature_2m));
@@ -818,6 +915,62 @@ function countUp(el, from, to) {
   requestAnimationFrame(step);
 }
 
+/* ---------- motion helpers ---------- */
+const N = (v, dec = 0) => `<span class="num" data-to="${v}" data-dec="${dec}">${(+v).toFixed(dec)}</span>`;
+function animateNums() {
+  $$(".num").forEach((el, i) => {
+    const to = +el.dataset.to, dec = +el.dataset.dec, t0 = performance.now() + 300 + i * 60, dur = 1000;
+    el.textContent = (0).toFixed(dec);
+    const step = (t) => {
+      const k = Math.max(0, Math.min(1, (t - t0) / dur)), e = 1 - Math.pow(1 - k, 4);
+      el.textContent = (to * e).toFixed(dec);
+      if (k < 1 && el.isConnected) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  });
+}
+// 3D tilt + light sheen that follows the mouse (mouse only, not touch)
+function bindTilt() {
+  if (reduceMotion) return;
+  const tilt = (el, max, parallax) => {
+    el.addEventListener("pointermove", (e) => {
+      if (e.pointerType !== "mouse") return;
+      const r = el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+      el.classList.add("tilting");
+      el.style.setProperty("--ry", `${(x - .5) * max}deg`); el.style.setProperty("--rx", `${(.5 - y) * max}deg`);
+      el.style.setProperty("--mx", `${x * 100}%`); el.style.setProperty("--my", `${y * 100}%`);
+      if (parallax) { el.style.setProperty("--px", `${(x - .5) * 22}px`); el.style.setProperty("--py", `${(y - .5) * 16}px`); }
+    });
+    el.addEventListener("pointerleave", () => {
+      el.classList.remove("tilting");
+      ["--rx", "--ry", "--px", "--py"].forEach(p => el.style.removeProperty(p));
+    });
+  };
+  const hero = $(".now"); if (hero) tilt(hero, 7, true);
+  $$(".tile").forEach(t => tilt(t, 10, false));
+}
+// ripple on every button press
+document.addEventListener("pointerdown", (e) => {
+  const b = e.target.closest("button"); if (!b || reduceMotion) return;
+  const r = b.getBoundingClientRect(), s = Math.max(r.width, r.height), sp = document.createElement("span");
+  sp.className = "ripple";
+  Object.assign(sp.style, { width: s + "px", height: s + "px", left: e.clientX - r.left - s / 2 + "px", top: e.clientY - r.top - s / 2 + "px" });
+  b.appendChild(sp); setTimeout(() => sp.remove(), 650);
+});
+// little golden sparks flying out of an element
+function sparks(el, n = 14) {
+  if (reduceMotion || !el) return;
+  const r = el.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+  const colors = ["#ffd25a", "#ffb03a", "#fff2b0", "#7cc4ff"];
+  for (let i = 0; i < n; i++) {
+    const a = (i / n) * Math.PI * 2 + Math.random() * .4, d = 30 + Math.random() * 40, p = document.createElement("span");
+    p.className = "spark";
+    Object.assign(p.style, { left: cx - 3.5 + "px", top: cy - 3.5 + "px", background: colors[i % colors.length] });
+    p.style.setProperty("--dx", Math.cos(a) * d + "px"); p.style.setProperty("--dy", Math.sin(a) * d + "px");
+    document.body.appendChild(p); setTimeout(() => p.remove(), 750);
+  }
+}
+
 function detailsHtml() {
   const c = data.current, d = data.daily, s = S();
   const uv = d.uv_index_max[0] ?? 0, uvI = uv < 3 ? 0 : uv < 6 ? 1 : uv < 8 ? 2 : uv < 11 ? 3 : 4;
@@ -832,7 +985,7 @@ function detailsHtml() {
     const v = air.us_aqi, i = v <= 50 ? 0 : v <= 100 ? 1 : v <= 150 ? 2 : v <= 200 ? 3 : 4;
     const col = ["var(--good)", "var(--fair)", "var(--poor)", "var(--bad)", "var(--vbad)"][i];
     aqTile = `<div class="tile"><span class="k">${I.leaf} ${s.kAir}</span>
-      <span class="v">${v} <span class="pill" style="background:${col}">${s.aqL[i]}</span></span>
+      <span class="v">${N(v)} <span class="pill" style="background:${col}">${s.aqL[i]}</span></span>
       <div class="meter aq"><i style="left:${Math.min(v / 500 * 100, 100)}%"></i></div>
       <span class="n">${s.aqNote(air.pm2_5?.toFixed(0) ?? "–")}</span></div>`;
   }
@@ -852,20 +1005,20 @@ function detailsHtml() {
           <circle cx="35" cy="35" r="30" fill="var(--panel-2)" stroke="var(--line)" stroke-width="2"/>
           ${[0, 90, 180, 270].map(a => `<line x1="35" y1="7" x2="35" y2="11" stroke="var(--muted)" stroke-width="2" transform="rotate(${a} 35 35)"/>`).join("")}
           <text x="35" y="20" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="var(--font-data)">N</text>
-          <g class="needle" style="transform-origin:35px 35px;transform:rotate(${c.wind_direction_10m + 180}deg)"><path d="M35 12l6 23h-12z" fill="var(--accent)"/><path d="M35 58l6-23h-12z" fill="var(--line)"/><circle cx="35" cy="35" r="3" fill="var(--fg)"/></g>
+          <g class="needle" style="transform-origin:35px 35px;transform:rotate(${c.wind_direction_10m + 180}deg)"><g class="wobble"><path d="M35 12l6 23h-12z" fill="var(--accent)"/><path d="M35 58l6-23h-12z" fill="var(--line)"/></g><circle cx="35" cy="35" r="3" fill="var(--fg)"/></g>
         </svg>
-        <span class="v">${WndN(c.wind_speed_10m)} <small>${WU()}<br>${compass(c.wind_direction_10m)}</small></span>
+        <span class="v">${N(WndN(c.wind_speed_10m))} <small>${WU()}<br>${compass(c.wind_direction_10m)}</small></span>
       </div>
       <span class="n">${s.gusts(Wnd(c.wind_gusts_10m))}</span></div>
     ${aqTile}
-    <div class="tile"><span class="k">${I.sun} ${s.kUV}</span><span class="v">${uv.toFixed(0)} <small>${s.uvL[uvI]}</small></span>
+    <div class="tile"><span class="k">${I.sun} ${s.kUV}</span><span class="v">${N(Math.round(uv))} <small>${s.uvL[uvI]}</small></span>
       <div class="meter uv"><i style="left:${Math.min(uv / 11 * 100, 100)}%"></i></div>
       <span class="n">${uv >= 3 ? s.uvYes : s.uvNo}</span></div>
-    <div class="tile"><span class="k">${I.drop} ${s.kHum}</span><span class="v">${hum}%</span>
+    <div class="tile"><span class="k">${I.drop} ${s.kHum}</span><span class="v">${N(hum)}%</span>
       <div class="meter hum"><i style="left:${hum}%"></i></div>
       <span class="n">${humNote} · ${s.dew(T(c.dew_point_2m))}</span></div>
-    <div class="tile"><span class="k">${I.rainfall} ${s.kPrec}</span><span class="v">${MM(d.precipitation_sum[0])} <small>${MMU()}</small></span><span class="n">${s.precNote(d.precipitation_probability_max[0])}</span></div>
-    <div class="tile"><span class="k">${I.gauge} ${s.kPress}</span><span class="v">${press} <small>${s.hpa}</small></span><span class="n">${pNote}</span></div>
+    <div class="tile"><span class="k">${I.rainfall} ${s.kPrec}</span><span class="v">${N(+MM(d.precipitation_sum[0]), unit === "f" ? 2 : 1)} <small>${MMU()}</small></span><span class="n">${s.precNote(d.precipitation_probability_max[0])}</span></div>
+    <div class="tile"><span class="k">${I.gauge} ${s.kPress}</span><span class="v">${N(press)} <small>${s.hpa}</small></span><span class="n">${pNote}</span></div>
     <div class="tile"><span class="k">${I.eye} ${s.kVis}</span><span class="v">${c.visibility != null ? VIS(c.visibility) : "–"} <small>${VISU()}</small></span><span class="n">${s.clouds(c.cloud_cover)}</span></div>
     <div class="tile wide"><span class="k">${I.rise} ${s.kSun}</span>
       <svg class="sunarc" viewBox="0 0 300 116" aria-hidden="true">
@@ -873,7 +1026,7 @@ function detailsHtml() {
         <path d="M40 92 A110 72 0 0 1 260 92" fill="none" stroke="var(--line)" stroke-width="2" stroke-dasharray="4 5"/>
         <path d="M40 92 A110 72 0 0 1 260 92" fill="none" stroke="url(#arcg)" stroke-width="3" stroke-linecap="round" pathLength="1" stroke-dasharray="${f} 1" class="fade-in"/>
         <line x1="20" y1="92" x2="280" y2="92" stroke="var(--line)" stroke-width="2"/>
-        ${f > 0 && f < 1 ? `<g class="sun-dot"><circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="14" fill="var(--warm)" opacity=".2"/><circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="8" fill="var(--warm)"/></g>` : ""}
+        ${f > 0 && f < 1 ? `<g class="sun-dot"><circle class="halo" cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="14" fill="var(--warm)" opacity=".25"/><circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="8" fill="var(--warm)"/></g>` : ""}
         <text x="40" y="110" text-anchor="middle">${fmtTime(d.sunrise[0])}</text>
         <text x="260" y="110" text-anchor="middle">${fmtTime(d.sunset[0])}</text>
       </svg>
@@ -894,7 +1047,29 @@ function renderHourly(animate) {
   $("#hourly-title").textContent = title;
   $("#hourly").innerHTML = hourlySvg(hrs, selDay === 0, animate);
   $("#hourly").scrollLeft = 0;
+  bindCrosshair(hrs);
 }
+
+// hover / touch readout on the hourly chart
+function bindCrosshair(hrs) {
+  const svg = $("#hourly svg"), g = svg.querySelector(".hcross"), G = hourlyGeom;
+  const show = (e) => {
+    const r = svg.getBoundingClientRect(), vx = (e.clientX - r.left) / r.width * G.Wd;
+    const i = Math.max(0, Math.min(hrs.length - 1, Math.round((vx - G.padX) / G.step)));
+    const x = G.padX + i * G.step, y = G.ys[i], hr = hrs[i];
+    const label = `${fmt(hr.t, { hour: "numeric" })} · ${Math.round(toU(hr.temp))}° · ${hr.pop}%`;
+    const tw = label.length * 7.2 + 18, bx = Math.max(4, Math.min(G.Wd - tw - 4, x - tw / 2));
+    g.querySelector("line").setAttribute("x1", x); g.querySelector("line").setAttribute("x2", x);
+    g.querySelector("circle").setAttribute("cx", x); g.querySelector("circle").setAttribute("cy", y);
+    const rect = g.querySelector("rect"); rect.setAttribute("x", bx); rect.setAttribute("width", tw);
+    const t = g.querySelector("text"); t.setAttribute("x", bx + tw / 2); t.textContent = label;
+    g.setAttribute("opacity", 1);
+  };
+  svg.addEventListener("pointermove", show);
+  svg.addEventListener("pointerdown", show);
+  svg.addEventListener("pointerleave", () => g.setAttribute("opacity", 0));
+}
+let hourlyGeom = {};
 
 function hourlySvg(hrs, fromNow, animate) {
   const Wd = 1000, H = 230, padX = 24, top = 62, bottom = 132, barTop = 154, barBot = 192;
@@ -935,6 +1110,9 @@ function hourlySvg(hrs, fromNow, animate) {
     const first = i === 0 && fromNow;
     out += `<circle class="${A ? "fade-in" : ""}" ${delay} cx="${x(i)}" cy="${y(temps[i])}" r="${first ? 5.5 : 2.6}" fill="${first ? "var(--accent)" : "var(--panel)"}" stroke="var(--accent)" stroke-width="2"/>`;
   });
+  if (fromNow && !reduceMotion) out += `<circle cx="${x(0)}" cy="${y(temps[0])}" r="6" fill="none" stroke="var(--accent)" stroke-width="2"><animate attributeName="r" values="6;16" dur="1.6s" repeatCount="indefinite"/><animate attributeName="opacity" values=".8;0" dur="1.6s" repeatCount="indefinite"/></circle>`;
+  hourlyGeom = { Wd, padX, step, ys: temps.map(y) };
+  out += `<g class="hcross" opacity="0"><line y1="${top - 14}" y2="${barBot}"/><circle r="6"/><rect y="${top - 46}" height="24" rx="8"/><text y="${top - 29}" text-anchor="middle"></text></g>`;
   return out + "</svg>";
 }
 
@@ -946,6 +1124,7 @@ function toggleSave() {
   store.set("wx-saved", saved);
   render(false);
   $("#star").classList.add("burst");
+  if (saved.some(p => placeKey(p) === k)) sparks($("#star"));
 }
 function renderChips() {
   const k = placeKey(place);
