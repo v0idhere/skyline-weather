@@ -2,7 +2,7 @@
 // the last saved copy of the app and of the weather data.
 const SHELL = "skyline-shell-v1";
 const DATA = "skyline-data-v1";
-const FILES = ["./", "index.html", "manifest.webmanifest", "icon.svg"];
+const FILES = ["./", "index.html", "manifest.webmanifest", "icon.svg", "icon-192.png", "icon-512.png"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(SHELL).then((c) => c.addAll(FILES)).then(() => self.skipWaiting()));
